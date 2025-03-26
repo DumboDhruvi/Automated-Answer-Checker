@@ -18,6 +18,7 @@ def main(pdf_path: str, answer_key_path: str, api_key: str):
     # Step 1: Extract student answers from PDF
     print("Extracting answers from PDF...")
     student_answers = pdf_dict(pdf_path, api_key)
+    print(student_answers)
 
     # Step 2: Load the answer key from a JSON file
     print("Loading correct answers...")
