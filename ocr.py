@@ -109,8 +109,4 @@ def pdf_obj_to_text_with_ocr(pdf_file, api_key, dpi=100, delete_after_use=False)
 
 # Example usage
 if __name__ == "__main__":
-    pdf_file = r""  # Replace with your PDF file
-    api_key = "K85286034988957"  # Replace with your actual API key of easyocr or other api
-
-    text = pdf_to_text_with_ocr(pdf_file, api_key)
-    print("Extracted Text:\n", text)
+    pdf_file = r""  
