@@ -69,9 +69,6 @@ def main_st(pdf_file, answer_key_file, api_key):
 
 # Example Usage
 if __name__ == "__main__":
-    pdf_file = r"test_assignments\test_ans_sheet.pdf"  # Replace with actual path
-    api_key = "K85286034988957"  # If needed for OCR
-    answer_key_file = r"test_assignments\ans_key.json"  # Replace with actual path
-
-    result = main(pdf_file,answer_key_file, api_key)
-    print("Final Scores:", result)
+    pdf_file = r"test_assignments\test_ans_sheet.pdf"  
+    answer_key_file = r"test_assignments\ans_key.json"  
+    
