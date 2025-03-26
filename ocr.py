@@ -80,7 +80,12 @@ def pdf_obj_to_text_with_ocr(pdf_file, api_key, dpi=100, delete_after_use=False)
         with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as temp_image:
             img.save(temp_image.name, "JPEG", quality=95)
             temp_files.append(temp_image.name)
+            if not os.path.exists(temp_image.name):
+                st.write(f"Page {i+1}: Failed to create image")
+                extracted_text += f"\n[Error: Image creation failed for page {i+1}]\n"
+                continue
 
+        
         # Perform OCR
         with open(temp_image.name, 'rb') as image_file:
             try:
