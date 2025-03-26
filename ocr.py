@@ -2,6 +2,7 @@ from pdf2image import convert_from_path, convert_from_bytes
 import requests
 import os
 import tempfile
+import streamlit as st
 
 def pdf_to_text_with_ocr(pdf_path, api_key, output_folder="output", dpi=200, delete_after_use=False):
     """
@@ -50,7 +51,7 @@ def pdf_to_text_with_ocr(pdf_path, api_key, output_folder="output", dpi=200, del
             print(f"Error: 'ParsedResults' missing. Full response: psge mo:{i}")
             extracted_text += f"\n[Error: OCR failed for this page {i}]\n"
 
-    # Delete images after OCR only warning comment out if needed
+    # Delete images if enabled
     if delete_after_use:
         for img_path in image_paths:
             os.remove(img_path)
@@ -65,13 +66,13 @@ def pdf_obj_to_text_with_ocr(pdf_file, api_key, dpi=100, delete_after_use=False)
     Parameters:
     - pdf_file (BytesIO): Streamlit uploaded file.
     - api_key (str): API key for OCR.Space.
-    - dpi (int): Resolution of images (default: 200).
+    - dpi (int): Resolution of images (default: 100).
     - delete_after_use (bool): Whether to delete temporary images after OCR.
 
     Returns:
     - str: Extracted text from the PDF.
     """
-    pdf_file.seek(0)  # Move pointer to start (important for Streamlit uploads)
+    pdf_file.seek(0)
     images = convert_from_bytes(pdf_file.read(), dpi=dpi)
     extracted_text = ""
     temp_files = []
@@ -85,8 +86,6 @@ def pdf_obj_to_text_with_ocr(pdf_file, api_key, dpi=100, delete_after_use=False)
                 extracted_text += f"\n[Error: Image creation failed for page {i+1}]\n"
                 continue
 
-        
-        # Perform OCR
         with open(temp_image.name, 'rb') as image_file:
             try:
                 response = requests.post(
@@ -96,16 +95,14 @@ def pdf_obj_to_text_with_ocr(pdf_file, api_key, dpi=100, delete_after_use=False)
                 )
                 response.raise_for_status()
                 result = response.json()
-
                 if "ParsedResults" in result and result["ParsedResults"]:
                     extracted_text += f"Page {i+1}: " + result["ParsedResults"][0]["ParsedText"] + "\n"
                 else:
-                    extracted_text += f"\n[Error: OCR failed for page {i+1}]\n"
-
+                    extracted_text += f"\n[Error: OCR failed for page {i+1} - No parsed results]\n"
             except requests.exceptions.RequestException as e:
-                extracted_text += f"\n[Error: OCR API request failed for page {i+1}]\n"
+                st.write(f"OCR API request failed for page {i+1}: {str(e)}")
+                extracted_text += f"\n[Error: OCR API request failed for page {i+1} - {str(e)}]\n"
 
-    # Delete temporary images if enabled
     if delete_after_use:
         for temp_file in temp_files:
             os.remove(temp_file)
@@ -114,4 +111,4 @@ def pdf_obj_to_text_with_ocr(pdf_file, api_key, dpi=100, delete_after_use=False)
 
 # Example usage
 if __name__ == "__main__":
-    pdf_file = r""  
+    pdf_file = r"" 
