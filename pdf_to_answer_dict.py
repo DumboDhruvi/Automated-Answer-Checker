@@ -7,6 +7,7 @@ def pdf_dict(pdf_path: str, api_key : str) -> dict:
 
 def pdf_dict_streamlit(pdf_path, api_key : str) -> dict:
     extracted_text = pdf_obj_to_text_with_ocr(pdf_path, api_key, dpi=100, delete_after_use=False)
+    print("extracted :", extracted_text)
     return raw_to_dict(extracted_text)
 
 
