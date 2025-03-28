@@ -284,7 +284,8 @@ if st.session_state.get("stage") == "results":
     
     if st.button("Start New Grading Session"):
         st.session_state.clear()
-        
+        st.rerun()
+
 full_instructions()
 
     
