@@ -112,6 +112,7 @@ def quick_guide():
            - Click "Grade All Answers"
         </div>
         """, unsafe_allow_html=True)
+quick_guide()
 
 def full_instructions():
     st.markdown("""<a name="full-guide"></a>""", unsafe_allow_html=True)
