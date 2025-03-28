@@ -52,7 +52,6 @@ h1, h2, h3 {
 }
 
 .instruction-box {
-    background-color: #f0e6ff;
     border-left: 4px solid #6a0dad;
     padding: 1rem;
     margin-bottom: 1.5rem;
