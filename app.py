@@ -104,7 +104,7 @@ if answer_key_file:
 if st.session_state.get("stage") == "student_details":
     st.header("📤 Student Answer Submission")
     for i in range(len(st.session_state.students)):
-        with st.expander(f"Student {i + 1}", expanded=True):
+        with st.expander(f"Student {i + 1}", expanded=False):
             name = st.text_input("Full Name", key=f"name_{i}")
             roll_no = st.text_input("Roll Number", key=f"roll_{i}")
             pdf_file = st.file_uploader(
