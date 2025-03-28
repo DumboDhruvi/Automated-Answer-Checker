@@ -2,6 +2,13 @@ import streamlit as st
 from main import *
 from pdf_to_answer_dict import *
 import pandas as pd
+import warnings
+
+# Suppress warnings
+warnings.filterwarnings("ignore", category=RuntimeWarning)
+
+# Set page config for a wider layout and custom title
+st.set_page_config(page_title="Exam Grader", layout="wide")
 
 # Custom CSS for styling
 st.markdown("""
@@ -77,11 +84,11 @@ background-color: rgba(0, 0, 0, 0.7);
 """
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
-# Main App
-st.title("Automated Answer Checker")
+# Main App Title and Description
+st.title("📝 Automated Answer Checker")
 st.markdown("""
 <div style="text-align: center; margin-bottom: 2rem;">
-This app allows teachers to upload an answer key and student answer sheets for automated grading.
+This app allows teachers to upload an answer key and student answer sheets for automated grading of multiple students.
 </div>
 """, unsafe_allow_html=True)
 
@@ -92,120 +99,120 @@ answer_key_file = st.file_uploader("Upload Answer Key (JSON format)", type="json
 if answer_key_file:
     st.success("Answer key uploaded successfully!")
 
-# Student Management
-st.header("👥 Student Details")
-num_students = st.number_input("Number of Students", min_value=1, max_value=50, value=1, key="num_students")
-
-if st.button("Continue"):
-    st.session_state.students = [{} for _ in range(num_students)]
-    st.session_state.stage = "student_details"
+    # Student Management
+    st.header("👥 Student Details")
+    num_students = st.number_input("Number of Students", min_value=1, max_value=50, value=1, key="num_students")
+    if st.button("Continue"):
+        st.session_state.students = [{} for _ in range(num_students)]
+        st.session_state.stage = "student_details"
 
 # Student Answer Submission
-if "stage" in st.session_state and st.session_state.stage == "student_details":
+if st.session_state.get("stage") == "student_details":
     st.header("📤 Student Answer Submission")
-    
     for i in range(len(st.session_state.students)):
-        with st.expander(f"Student {i + 1}", expanded=False):
-            name = st.text_input(f"Full Name", key=f"name_{i}")
-            roll_no = st.text_input(f"Roll Number", key=f"roll_{i}")
-            pdf_files = st.file_uploader(
-                f"Upload Answer PDFs",
+        with st.expander(f"Student {i + 1}", expanded=True):
+            name = st.text_input("Full Name", key=f"name_{i}")
+            roll_no = st.text_input("Roll Number", key=f"roll_{i}")
+            pdf_file = st.file_uploader(
+                "Upload Answer PDF",
                 type=["pdf"],
-                key=f"pdfs_{i}"
+                key=f"pdf_{i}",
+                accept_multiple_files=False  # Single PDF per student
             )
-            
-            if pdf_files:
+            if name and roll_no and pdf_file:
                 st.session_state.students[i] = {
                     "name": name,
                     "roll_no": roll_no,
-                    "pdf_files": pdf_files
+                    "pdf_file": pdf_file
                 }
-
+    
     if st.button("Grade All Answers"):
         st.session_state.stage = "results"
 
 # Results Display
-if "stage" in st.session_state and st.session_state.stage == "results":
+if st.session_state.get("stage") == "results":
     st.header("📊 Grading Results")
-    
-    # Create summary table
+    progress_text = st.empty()
     summary_data = []
     detailed_data = []
+    api_key = "K85286034988957"  # Replace with your actual API key
     
-    for student in st.session_state.students:
-        if not student or 'pdf_files' not in student: 
-            continue  # Skip if no student data or no PDFs uploaded
+    progress_bar = st.progress(0)
+    total_students = len([s for s in st.session_state.students if "pdf_file" in s and s["pdf_file"]])
+    processed_count = 0
 
-        try:
-            # Process each PDF file for this student
-            extracted_text = ""
-            for pdf_file in student['pdf_files']:
-                # Process the PDF (replace with your actual processing function)
-                api_key = "K85286034988957"  # Your API key
-                processed_text = main_st(pdf_file, answer_key_file, api_key)
-                extracted_text += processed_text + "\n"
+    with st.spinner("Extracting and grading answers..."):
+        for i, student in enumerate(st.session_state.students):
+            if "pdf_file" not in student or not student["pdf_file"]:
+                continue
+            progress_text.text(f"Processing {student.get('name', 'Student ' + str(i+1))} ({i+1} of {total_students})...")
+            try:
+                print("here")
+                scores = main_st(student["pdf_file"], answer_key_file, api_key)
+                total = sum(scores.values())
+                max_marks = len(scores) * 10
+                percentage = (total / max_marks) * 100 if max_marks > 0 else 0
+                print("here")
+                student_record = {
+                    "Roll No": student.get("roll_no", "N/A"),
+                    "Name": student.get("name", "N/A"),
+                    **scores,
+                    "Total": total,
+                    "Percentage": percentage,
+                    "max_marks" : max_marks
+                }
+                summary_data.append({
+                    "Roll No": student_record["Roll No"],
+                    "Name": student_record["Name"],
+                    "Percentage": percentage  # Float
+                })
+                detailed_data.append(student_record)
+                
+                processed_count += 1
+                progress_bar.progress(int((processed_count / total_students) * 100) if total_students > 0 else 100)
             
-            # Display extracted text (optional)
-            with st.expander(f"Extracted Text for {student.get('name', 'Unknown')}"):
-                st.text_area("", extracted_text, height=200, key=f"text_{student['roll_no']}")
-            
-            # Generate example scores (replace with actual grading logic)
-            scores = {"Q1": 8, "Q2": 7, "Q3": 9}  # Example scores
-            total_marks = sum(scores.values())
-            max_marks = len(scores) * 10  # Assuming each question is out of 10
-            percentage = (total_marks / max_marks) * 100
-            
-            # Build student record
-            student_record = {
-                "Roll No": student.get('roll_no', 'N/A'),
-                "Name": student.get('name', 'N/A'),
-                **scores,
-                "Total": total_marks,
-                "Percentage": percentage
-            }
-            
-            summary_data.append({
-                "Roll No": student_record["Roll No"],
-                "Name": student_record["Name"],
-                "Percentage": f"{percentage:.2f}%"
-            })
-            
-            detailed_data.append(student_record)
-            
-        except Exception as e:
-            st.error(f"Error processing {student.get('name', 'Unknown')}: {str(e)}")
-            continue
+            except Exception as e:
+                st.error(f"Error processing {student.get('name', 'Unknown')}: {str(e)}")
     
-    # Display summary table
-    st.subheader("Overall Results")
+    progress_text.text("Grading complete!")
+    progress_bar.progress(100)
+    
     if summary_data:
+        st.subheader("Overall Results")
         summary_df = pd.DataFrame(summary_data)
-        st.dataframe(summary_df.style.format({"Percentage": "{:.2f}%"}),
-                    use_container_width=True)
-    else:
-        st.warning("No student data available for display")
-    
-    # Detailed results in expandable section
-    with st.expander("View Detailed Results", expanded=False):
-        if detailed_data:
+        st.dataframe(
+            summary_df.style.format({"Percentage": "{:.2f}%"}),
+            use_container_width=True
+        )
+        
+        with st.expander("View Detailed Results", expanded=False):
             detailed_df = pd.DataFrame(detailed_data)
-            
-            # Dynamically determine columns order
+            # Dynamically order columns
             base_columns = ["Roll No", "Name"]
-            question_columns = [col for col in detailed_df.columns if col.startswith('Q')]
+            question_columns = [col for col in detailed_df.columns if col.startswith('a')]
             other_columns = ["Total", "Percentage"]
+            existing_columns = [col for col in base_columns + question_columns + other_columns if col in detailed_df.columns]
             
-            # Ensure columns exist before trying to reorder
-            existing_columns = [col for col in base_columns + question_columns + other_columns 
-                              if col in detailed_df.columns]
-            
-            if existing_columns:
-                st.dataframe(detailed_df[existing_columns].style.format({"Percentage": "{:.2f}%"}),
-                            use_container_width=True)
-            else:
-                st.warning("No detailed results available")
-        else:
-            st.warning("No detailed data available for display")
+            st.dataframe(
+                detailed_df[existing_columns].style.format({"Percentage": "{:.2f}%"}),
+                use_container_width=True
+            )
+            # Download button for detailed results
+            csv = detailed_df.to_csv(index=False)
+            st.download_button(
+                label="📥 Download Detailed Results",
+                data=csv,
+                file_name="grading_results.csv",
+                mime="text/csv"
+            )
+    else:
+        st.warning("⚠️ No student data available for display")
     
     if st.button("Start New Grading Session"):
-        st.session_state.clear()
+        del st.session_state.stage
+        del st.session_state.students
+        st.rerun()
+
+# Add a footer
+st.markdown("---")
+st.markdown("Built with ❤️ by Tech Creators | Powered by Streamlit")
