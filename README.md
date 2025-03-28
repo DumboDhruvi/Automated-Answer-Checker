@@ -1,6 +1,6 @@
 # 📝 Automated Answer Checker
 
-[![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white)](https://streamlit.io/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white)](https://automated-answer-checker-kmgm2v4k3oktn9yfsfccjy.streamlit.app/)
 [![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 
 A modern web application for automated answer sheet evaluation using AI/ML techniques. Designed for educators to streamline exam grading workflows.
