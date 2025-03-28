@@ -1,0 +1,4 @@
+{
+    "answer1": {"answer": "Machine Learning is a field of Artificial Intelligence that enables computers to learn patterns from data without being explicitly programmed.", "Max Marks": 10},
+    "answer2": {"answer": "Overfitting occurs when a machine learning model learns the noise in the training data instead of the actual pattern, leading to poor generalization on new data.", "Max Marks": 10}
+}
