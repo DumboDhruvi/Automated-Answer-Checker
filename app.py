@@ -283,16 +283,11 @@ if st.session_state.get("stage") == "results":
         st.warning("⚠️ No student data available for display")
     
     if st.button("Start New Grading Session"):
-        del st.session_state.stage
-        del st.session_state.students
+        st.session_state.clear()
         st.rerun()
+        
 full_instructions()
 
-if __name__ == "__main__":
-    if "students" not in st.session_state:
-        st.session_state.students = []
-    if "stage" not in st.session_state:
-        st.session_state.stage = ""
     
 # Add a footer
 st.markdown("---")
