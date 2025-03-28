@@ -4,12 +4,6 @@ from pdf_to_answer_dict import *
 import pandas as pd
 import warnings
 
-# Suppress warnings
-warnings.filterwarnings("ignore", category=RuntimeWarning)
-
-# Set page config for a wider layout and custom title
-st.set_page_config(page_title="Exam Grader", layout="wide")
-
 # Custom CSS for styling
 st.markdown("""
 <style>
