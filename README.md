@@ -58,6 +58,9 @@ pip install -r requirements.txt
 
 - Create your Feature Branch
 
+### 📂 Test Files
+Sample test images and files are available in the Test folder of this repository for reference.
+
 ### 📜 License
 - Distributed under MIT License. See [LICENSE](LICENSE) for details.
 
