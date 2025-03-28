@@ -50,6 +50,14 @@ h1, h2, h3 {
     background-color: #6a0dad;
     color: white;
 }
+
+.instruction-box {
+    background-color: #f0e6ff;
+    border-left: 4px solid #6a0dad;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 0 8px 8px 0;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -77,6 +85,78 @@ background-color: rgba(0, 0, 0, 0.7);
 </style>
 """
 st.markdown(page_bg_img, unsafe_allow_html=True)
+
+# Instruction Sections
+def quick_guide():
+    with st.expander("📘 QUICK START GUIDE - Click to Expand", expanded=False):
+        st.markdown("""
+        <div class="instruction-box">
+        <h4>🚀 Get Started in 3 Steps</h4>
+        
+        1. <strong>Prepare Answer Key</strong>  
+           - Create JSON file with model answers  
+           ```json
+           {"Q1": {"Answer": "Sample answer", "Max Marks": 5}}
+           ```
+        
+        2. <strong>Format Answer Sheets</strong>  
+           - Each PDF must contain:  
+           ```plaintext
+           Question 1:  
+           Answer: Student's response...
+           ```
+        
+        3. <strong>Upload & Grade</strong>  
+           - Add student details  
+           - Upload their answer PDFs  
+           - Click "Grade All Answers"
+        </div>
+        """, unsafe_allow_html=True)
+
+def full_instructions():
+    st.markdown("""<a name="full-guide"></a>""", unsafe_allow_html=True)
+    with st.expander("📚 COMPLETE USER MANUAL", expanded=False):
+        st.markdown("""
+        ## 📝 Answer Key Preparation
+        **File Format:** JSON  
+        **Required Structure:**
+        ```json
+        {
+          "Q1": {
+            "Answer": "The capital of France is Paris",
+            "Max Marks": 5
+          },
+          "Q2": {
+            "Answer": "2πr",
+            "Max Marks": 3
+          }
+        }
+        ```
+        
+        ## 🖨️ Answer Sheet Requirements
+        - **Scanning:** 300dpi or higher resolution
+        - **Formatting:**
+        ```plaintext
+        Question 3:
+        Answer: The mitochondria is the powerhouse...
+        ```
+        - **File Type:** PDF (one file per student)
+        
+        ## 🧑‍🎓 Student Data Entry
+        1. Enter total number of students
+        2. For each student:
+           - Full name
+           - Roll number
+           - Upload formatted answer PDF
+        
+        ## 🔍 Understanding Results
+        - **Score Calculation:** AI compares answers using semantic similarity
+        - **Color Coding:**
+          - >80% match: Green highlight
+          - 40-80% match: Yellow highlight
+          - <40% match: Red highlight
+        - **Export Options:** CSV download available
+        """)
 
 # Main App Title and Description
 st.title("📝 Automated Answer Checker")
@@ -206,7 +286,15 @@ if st.session_state.get("stage") == "results":
         del st.session_state.stage
         del st.session_state.students
         st.rerun()
+full_instructions()
 
+if __name__ == "__main__":
+    if "students" not in st.session_state:
+        st.session_state.students = []
+    if "stage" not in st.session_state:
+        st.session_state.stage = ""
+    main_app()
+    
 # Add a footer
 st.markdown("---")
 st.markdown("Built with ❤️ by Tech Creators | Powered by Streamlit")
