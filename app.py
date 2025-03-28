@@ -293,7 +293,6 @@ if __name__ == "__main__":
         st.session_state.students = []
     if "stage" not in st.session_state:
         st.session_state.stage = ""
-    main_app()
     
 # Add a footer
 st.markdown("---")
