@@ -56,6 +56,7 @@ def main_st(pdf_file, answer_key_file, api_key):
 
     # Step 2: Load the answer key from the JSON file-like object
     print("Loading correct answers...")
+    answer_key_file.seek(0)
     answer_key = json.load(answer_key_file)  # Directly read JSON from BytesIO
 
     # Step 3: Initialize Grader and grade answers
