@@ -53,6 +53,43 @@ pip install -r requirements.txt
 
 - 📊 Analyze performance reports
 
+
+
+### 📷Screenshots of working
+![Screenshot 1](https://github.com/user-attachments/assets/ac580e59-53bd-49df-ae6e-f92decb991cf)
+### Screenshot 1:
+- **Title:** "Automated Answer Checker"  
+- **Purpose:** Allows teachers to upload an answer key and student answer sheets for automated grading.  
+- **Functionality:**  
+  - Upload an answer key in **JSON format**.  
+  - Drag-and-drop or browse files (limit **200MB per file**).  
+  - Option to expand a **quick start guide** and access the **complete user manual**.  
+
+![Screenshot 2](https://github.com/user-attachments/assets/ce97c577-76d7-4b9f-90d2-0d5c0f975d07)
+### Screenshot 2:
+- **Title:** "Student Answer Submission"  
+- **Purpose:** Allows students to submit their answer sheets for grading.  
+- **Functionality:**  
+  - Input **Full Name** and **Roll Number**.  
+  - Upload an **answer sheet (PDF format, max 200MB)**.  
+  - Displays uploaded file **"test_ans_sheet.pdf" (97.4KB)**.  
+  - **"Grade All Answers"** button to start the grading process.
+
+![Screenshot 3](https://github.com/user-attachments/assets/3172c601-f16f-4b4c-9339-1e20238c2322)
+### Screenshot 3:
+- **Title:** "Grading Results"  
+- **Purpose:** Displays student grading results.  
+- **Functionality:**  
+  - **Overall Results**:  
+    - Roll No: 1, Name: **Akshint**, **Score: 55.00%**  
+  - **Detailed Results**:  
+    - Breakdown of answers and scores (answer1: **4**, answer2: **7**, total: **11**).  
+  - **Options:**  
+    - Download detailed results.  
+    - Start a new grading session.
+
+
+
 ### 🤝 Contributing
 - Fork the Project
 
