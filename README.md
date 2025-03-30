@@ -95,6 +95,8 @@ pip install -r requirements.txt
 
 - Create your Feature Branch
 
+- Create a pull request.
+  
 ### 📂 Test Files
 Sample test images and files are available in the Test folder of this repository for reference.
 
