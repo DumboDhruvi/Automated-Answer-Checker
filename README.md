@@ -27,7 +27,7 @@ A modern web application for automated answer sheet evaluation using AI/ML techn
 
 ### Prerequisites
 - Python 3.11+
-- Tesseract OCR ([Installation Guide](https://github.com/tesseract-ocr/tesseract))
+- poppler
 
 ### Installation
 1. Clone repository:
