@@ -95,14 +95,14 @@ def quick_guide():
         1. <strong>Prepare Answer Key</strong>  
            - Create JSON file with model answers  
            ```json
-           {"Q1": {"Answer": "Sample answer", "Max Marks": 5}}
+           {"answer1": {"Answer": "Sample answer", "Max Marks": 5}}
            ```
         
         2. <strong>Format Answer Sheets</strong>  
            - Each PDF must contain:  
            ```plaintext
-           Question 1:  
-           Answer: Student's response...
+           Question number 1 Answer:
+           Student's response...
            ```
         
         3. <strong>Upload & Grade</strong>  
@@ -126,11 +126,11 @@ def full_instructions():
         **Required Structure:**
         ```json
         {
-          "Q1": {
+          "answer1": {
             "Answer": "The capital of France is Paris",
             "Max Marks": 5
           },
-          "Q2": {
+          "answer2": {
             "Answer": "2πr",
             "Max Marks": 3
           }
